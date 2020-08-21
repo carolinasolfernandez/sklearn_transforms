@@ -26,13 +26,10 @@ class ReplaceMissingValues(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         data = X.copy()
-
-        mean_imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
-        zero_imputer = SimpleImputer(missing_values=np.nan, strategy='constant', fill_value=0)
-
+        
         for mean_column in self.mean_columns:
-          data[[mean_column]] = mean_imputer.fit_transform(data[[mean_column]])
+          data[[mean_column]] = data[[mean_column]].fillna(data[[mean_column]].mean())
         for zero_column in self.zero_columns:
-          data[[zero_column]] = zero_imputer.fit_transform(data[[zero_column]])
+          data[[zero_column]] = data[[zero_column]].fillna(0)
 
         return data
